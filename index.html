@@ -962,55 +962,44 @@
       </div>
 
       <!-- SEÇÃO DE VÍDEOS COM SUPORTE A YOUTUBE E SHORTS -->
-      <div id="videosSection" class="content-section">
-        <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
-        <h2 class="section-title">Vídeos de apresentação</h2>
-        
-        <div class="info-card" style="background: rgba(232,93,4,0.1); border-color: var(--primary); margin-bottom: 1rem;">
-          <p>📹 <strong>YouTube Shorts / Vídeos normais</strong><br>
-          Cole a URL do seu vídeo do YouTube (normal ou Short) nos campos abaixo. O vídeo será salvo automaticamente e não precisará ser reinserido.</p>
-        </div>
-        
-        <div class="video-grid">
-          <!-- Vídeo 1 -->
-          <div class="video-card">
-            <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
-            <div id="video1Container" class="video-wrapper">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
-                <p>📹 Aguardando URL</p>
-                <p style="font-size: 12px; margin-top: 8px;">https://www.youtube.com/shorts/bpVWv-iIK9Q</p>
-              </div>
-            </div>
-            <div class="video-caption">
-              📌 Análise crítica do HelloChinese na era pós-digital.
-              <br>
-              <input type="text" id="youtubeUrl1" class="video-url-input" placeholder="Ex: https://www.youtube.com/shorts/bpVWv-iIK9Q">
-              <button onclick="loadYouTubeVideo('1')" class="load-video-btn">▶ Carregar Vídeo</button>
-              <div id="videoStatus1" class="video-status"></div>
-            </div>
-          </div>
-          
-          <!-- Vídeo 2 -->
-          <div class="video-card">
-            <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
-            <div id="video2Container" class="video-wrapper">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
-                <p>📹 Aguardando URL</p>
-                <p style="font-size: 12px; margin-top: 8px;">Cole a URL do YouTube abaixo</p>
-              </div>
-            </div>
-            <div class="video-caption">
-              🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.
-              <br>
-              <input type="text" id="youtubeUrl2" class="video-url-input" placeholder="Ex: https://youtu.be/ABCD1234 ou https://youtube.com/shorts/ABCD1234">
-              <button onclick="loadYouTubeVideo('2')" class="load-video-btn">▶ Carregar Vídeo</button>
-              <div id="videoStatus2" class="video-status"></div>
-            </div>
-          </div>
-        </div>
-        <hr>
+     <div id="videosSection" class="content-section">
+  <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
+  <h2 class="section-title">Vídeos de apresentação</h2>
+  <div class="video-grid">
+    <!-- VÍDEO 1: APRESENTAÇÃO FALADA (COM SEU SHORT) -->
+    <div class="video-card">
+      <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
+        <iframe 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+          src="https://www.youtube.com/embed/bpVWv-iIK9Q" 
+          title="Praticando Mandarim"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
       </div>
-
+      <div class="video-caption">📌 Análise crítica do HelloChinese na era pós-digital.</div>
+    </div>
+    
+    <!-- VÍDEO 2: DEMONSTRAÇÃO DO APLICATIVO (COLOQUE SUA OUTRA URL AQUI) -->
+    <div class="video-card">
+      <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
+        <iframe 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+          src="https://www.youtube.com/embed/SEU_OUTRO_ID_AQUI" 
+          title="Demonstração do App"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-caption">🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.</div>
+    </div>
+  </div>
+  <hr>
+</div>
       <div id="insightsSection" class="content-section">
         <div class="section-sub">DESCOBERTAS</div>
         <h2 class="section-title">Insights</h2>
