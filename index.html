@@ -962,40 +962,47 @@
       </div>
 
       <!-- SEÇÃO DE VÍDEOS COM SUPORTE A YOUTUBE E SHORTS -->
-     <div id="videosSection" class="content-section">
+    <div id="videosSection" class="content-section">
   <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
   <h2 class="section-title">Vídeos de apresentação</h2>
+  
+  <div class="info-card" style="background: rgba(232,93,4,0.15); border-color: var(--primary); margin-bottom: 1.5rem;">
+    <p>🎬 <strong>Seus vídeos do YouTube:</strong> Cole as URLs abaixo. Os vídeos ficam salvos automaticamente!</p>
+  </div>
+  
   <div class="video-grid">
-    <!-- VÍDEO 1: APRESENTAÇÃO FALADA (COM SEU SHORT) -->
+    <!-- VÍDEO 1 -->
     <div class="video-card">
       <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
-      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
-        <iframe 
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-          src="https://www.youtube.com/embed/bpVWv-iIK9Q" 
-          title="Praticando Mandarim"
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+      <div id="video1Container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #666;">
+          <p>📹 Nenhum vídeo carregado</p>
+        </div>
       </div>
-      <div class="video-caption">📌 Análise crítica do HelloChinese na era pós-digital.</div>
+      <div class="video-caption">
+        📌 Análise crítica do HelloChinese na era pós-digital.
+        <br><br>
+        <input type="text" id="youtubeUrl1" style="width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid #2a2a2a; color: white; border-radius: 8px;" placeholder="Cole a URL do YouTube aqui">
+        <button onclick="carregarVideoYouTube('1')" style="margin-top: 10px; background: #E85D04; border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">▶ CARREGAR VÍDEO</button>
+        <div id="status1" style="margin-top: 8px; font-size: 12px;"></div>
+      </div>
     </div>
     
-    <!-- VÍDEO 2: DEMONSTRAÇÃO DO APLICATIVO (COLOQUE SUA OUTRA URL AQUI) -->
+    <!-- VÍDEO 2 -->
     <div class="video-card">
       <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
-      <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
-        <iframe 
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-          src="https://www.youtube.com/embed/SEU_OUTRO_ID_AQUI" 
-          title="Demonstração do App"
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+      <div id="video2Container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #666;">
+          <p>📹 Nenhum vídeo carregado</p>
+        </div>
       </div>
-      <div class="video-caption">🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.</div>
+      <div class="video-caption">
+        🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.
+        <br><br>
+        <input type="text" id="youtubeUrl2" style="width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid #2a2a2a; color: white; border-radius: 8px;" placeholder="Cole a URL do YouTube aqui">
+        <button onclick="carregarVideoYouTube('2')" style="margin-top: 10px; background: #E85D04; border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">▶ CARREGAR VÍDEO</button>
+        <div id="status2" style="margin-top: 8px; font-size: 12px;"></div>
+      </div>
     </div>
   </div>
   <hr>
@@ -1473,6 +1480,99 @@
   
   // Carregar vídeos salvos ao iniciar
   loadSavedVideos();
+   // Função para extrair o ID do YouTube
+  function extrairYouTubeId(url) {
+    if (!url) return null;
+    
+    // Para Shorts: youtube.com/shorts/ID
+    let match = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    // Para URLs normais: youtu.be/ID ou youtube.com/watch?v=ID
+    match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    return null;
+  }
+
+  // Função para carregar o vídeo
+  function carregarVideoYouTube(numero) {
+    const urlInput = document.getElementById(`youtubeUrl${numero}`);
+    const url = urlInput.value.trim();
+    const container = document.getElementById(`video${numero}Container`);
+    const statusDiv = document.getElementById(`status${numero}`);
+    
+    if (!url) {
+      alert('Por favor, cole a URL do YouTube');
+      return;
+    }
+    
+    const videoId = extrairYouTubeId(url);
+    
+    if (!videoId) {
+      statusDiv.innerHTML = '❌ URL inválida! Use o formato do YouTube';
+      statusDiv.style.color = '#E76F51';
+      setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
+      return;
+    }
+    
+    // Criar o iframe do YouTube
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}`;
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    
+    // Limpar e adicionar o vídeo
+    container.innerHTML = '';
+    container.appendChild(iframe);
+    
+    // Salvar no localStorage
+    localStorage.setItem(`videoSalvo${numero}`, url);
+    
+    // Feedback
+    statusDiv.innerHTML = '✅ Vídeo carregado com sucesso!';
+    statusDiv.style.color = '#2A9D8F';
+    setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
+  }
+
+  // Carregar vídeos salvos automaticamente
+  function carregarVideosSalvos() {
+    for (let i = 1; i <= 2; i++) {
+      const urlSalva = localStorage.getItem(`videoSalvo${i}`);
+      if (urlSalva) {
+        const urlInput = document.getElementById(`youtubeUrl${i}`);
+        if (urlInput) {
+          urlInput.value = urlSalva;
+          
+          const videoId = extrairYouTubeId(urlSalva);
+          if (videoId) {
+            const container = document.getElementById(`video${i}Container`);
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            container.innerHTML = '';
+            container.appendChild(iframe);
+          }
+        }
+      }
+    }
+  }
+  
+  // Executar ao carregar a página
+  carregarVideosSalvos();
 </script>
 </body>
 </html>
