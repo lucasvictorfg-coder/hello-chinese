@@ -42,7 +42,6 @@
     min-height: 100vh;
   }
 
-  /* ─────────── FUNDO COM REFERÊNCIAS CHINESAS ─────────── */
   .chinese-bg {
     position: fixed;
     top: 0;
@@ -63,22 +62,6 @@
     bottom: 0;
     background: radial-gradient(ellipse at 30% 40%, rgba(232,93,4,0.08) 0%, rgba(10,10,10,0.95) 70%);
     z-index: 1;
-  }
-
-  .bg-characters {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.08;
-    font-family: 'Noto Serif SC', serif;
-    font-size: clamp(60px, 15vw, 180px);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    pointer-events: none;
   }
 
   .floating-char {
@@ -123,25 +106,6 @@
     z-index: -1;
   }
 
-  .scroll-border::before,
-  .scroll-border::after {
-    content: '✧';
-    position: absolute;
-    color: rgba(244, 162, 97, 0.15);
-    font-size: 14px;
-  }
-
-  .scroll-border::before {
-    top: -8px;
-    left: 20px;
-  }
-
-  .scroll-border::after {
-    bottom: -8px;
-    right: 20px;
-  }
-
-  /* ─────────── TELA DE BOAS-VINDAS (SPLASH INTERATIVO) ─────────── */
   .splash-screen {
     position: fixed;
     top: 0;
@@ -167,14 +131,8 @@
   }
 
   @keyframes floatIn {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .chinese-char {
@@ -284,7 +242,6 @@
     100% { transform: scale(1.2); opacity: 0; }
   }
 
-  /* ─────────── LAYOUT PRINCIPAL ─────────── */
   .app-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -579,7 +536,6 @@
     padding: 0 1.5rem;
   }
 
-  /* ─────────── INSIGHTS EXPANSÍVEIS ─────────── */
   .insight-card {
     background: rgba(30, 30, 30, 0.6);
     border-radius: 16px;
@@ -631,24 +587,11 @@
     color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.6;
-    border-top: none;
   }
 
   .insight-card.open .insight-body {
     max-height: 300px;
     padding: 0 1.5rem 1.5rem 1.5rem;
-  }
-
-  .insight-body p {
-    margin-bottom: 0.8rem;
-  }
-
-  .insight-body p:last-child {
-    margin-bottom: 0;
-  }
-
-  .insight-body strong {
-    color: var(--primary-light);
   }
 
   .tension-dual {
@@ -670,10 +613,6 @@
     padding: 1rem;
     border-radius: 12px;
     border-top: 3px solid var(--accent-red);
-  }
-
-  .videos-section {
-    margin: 2rem 0;
   }
 
   .video-grid {
@@ -718,19 +657,6 @@
     color: var(--text-secondary);
   }
 
-  audio {
-    width: 100%;
-    border-radius: 12px;
-    margin: 1rem 0;
-  }
-
-  canvas {
-    width: 100%;
-    background: var(--surface);
-    border-radius: 16px;
-    margin: 1rem 0;
-  }
-
   .ref-quote {
     font-style: italic;
     border-left: 3px solid var(--primary);
@@ -769,16 +695,13 @@
 </head>
 <body>
 
-<!-- FUNDO COM REFERÊNCIAS CHINESAS -->
 <div class="chinese-bg">
   <div class="pattern-overlay"></div>
-  <div class="bg-characters"></div>
   <div class="chop-seal"></div>
   <div class="scroll-border"></div>
   <div id="floatingChars"></div>
 </div>
 
-<!-- TELA DE BOAS-VINDAS (SPLASH) -->
 <div id="splashScreen" class="splash-screen">
   <div class="splash-content">
     <div class="chinese-char">你好</div>
@@ -792,10 +715,8 @@
   </div>
 </div>
 
-<!-- Indicador visual de áudio tocando -->
 <div id="soundIndicator" class="sound-indicator">🔊</div>
 
-<!-- CONTEÚDO PRINCIPAL -->
 <div class="app-container" id="mainApp" style="display: none;">
   
   <div id="homeScreen" class="home-screen">
@@ -846,15 +767,9 @@
         <p>Fontes acadêmicas utilizadas</p>
         <div class="portal-number">07</div>
       </div>
-      <div class="portal-card" data-section="quiz">
-        <div class="portal-icon">📝</div>
-        <h3>Teste</h3>
-        <p>Teste seus conhecimentos de mandarim</p>
-        <div class="portal-number">08</div>
-      </div>
     </div>
+  </div>
 
-  <!-- OVERLAY DE CONTEÚDO -->
   <div id="contentOverlay" class="content-overlay">
     <div class="content-container">
       <button class="close-btn" id="closeOverlayBtn">✕</button>
@@ -867,9 +782,9 @@
         <button class="nav-dot" data-nav="insights">💡 Insights</button>
         <button class="nav-dot" data-nav="reflection">⚖️ Reflexão</button>
         <button class="nav-dot" data-nav="references">📖 Ref.</button>
+        <button class="nav-dot" data-nav="quiz">📝 Teste</button>
       </div>
 
-      <!-- SEÇÃO PLATAFORMA -->
       <div id="platformSection" class="content-section">
         <div class="section-sub">ANÁLISE DO OBJETO</div>
         <h2 class="section-title">HelloChinese: estrutura e proposta</h2>
@@ -886,7 +801,6 @@
         <p>O aplicativo combina micro-lições de 5–10 minutos, prática de pronúncia e um sistema de progressão linear.</p>
       </div>
 
-      <!-- SEÇÃO EXPERIÊNCIA -->
       <div id="experienceSection" class="content-section">
         <div class="section-sub">PERCURSO AUTODIDATA</div>
         <h2 class="section-title">Minha experiência com o app</h2>
@@ -897,7 +811,6 @@
         <p>Essa dissociação entre progresso no app e competência linguística real é o ponto de partida para a análise crítica.</p>
       </div>
 
-      <!-- SEÇÃO TEORIA -->
       <div id="theorySection" class="content-section">
         <div class="section-sub">ARTICULAÇÃO TEÓRICA</div>
         <h2 class="section-title">Dois eixos fundamentais</h2>
@@ -921,7 +834,6 @@
         <div class="ref-quote">"Não estamos mais em um mundo onde o digital é separado da vida humana 'natural'." — Jandrić et al. (2018)</div>
       </div>
 
-         <!-- SEÇÃO VÍDEOS -->
       <div id="videosSection" class="content-section">
         <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
         <h2 class="section-title">Vídeos de apresentação</h2>
@@ -945,12 +857,11 @@
         </div>
         <hr>
       </div>
-      <!-- SEÇÃO INSIGHTS (COM 3 CARDS EXPANSÍVEIS) -->
+
       <div id="insightsSection" class="content-section">
         <div class="section-sub">DESCOBERTAS</div>
         <h2 class="section-title">Insights</h2>
 
-        <!-- Insight 1 -->
         <div class="insight-card" onclick="toggleInsight(this)">
           <div class="insight-header">
             <span class="insight-icon">🎮</span>
@@ -962,7 +873,6 @@
           </div>
         </div>
 
-        <!-- Insight 2 -->
         <div class="insight-card" onclick="toggleInsight(this)">
           <div class="insight-header">
             <span class="insight-icon">🎭</span>
@@ -974,7 +884,6 @@
           </div>
         </div>
 
-        <!-- Insight 3 -->
         <div class="insight-card" onclick="toggleInsight(this)">
           <div class="insight-header">
             <span class="insight-icon">🤖</span>
@@ -982,12 +891,11 @@
             <span class="insight-toggle">▼</span>
           </div>
           <div class="insight-body">
-            <p>Acredito que muita gente começa o HelloChinese achando que o app vai ser <strong>suficiente</strong> para aprender mandarim .</p>
+            <p>Acredito que muita gente começa o HelloChinese achando que o app vai ser <strong>suficiente</strong> para aprender mandarim.</p>
           </div>
         </div>
       </div>
 
-      <!-- SEÇÃO REFLEXÃO -->
       <div id="reflectionSection" class="content-section">
         <div class="section-sub">REFLEXÃO</div>
         <h2 class="section-title">Entre o encantamento e a crítica</h2>
@@ -1001,7 +909,6 @@
         <p>A perspectiva pós-digital é a mais honesta: o HelloChinese <strong>não é bom nem mau em si</strong> — ele é <strong>co-constitutivo</strong> de uma experiência de aprendizagem específica.</p>
       </div>
 
-      <!-- SEÇÃO REFERÊNCIAS -->
       <div id="referencesSection" class="content-section">
         <div class="section-sub">FONTES ACADÊMICAS</div>
         <h2 class="section-title">Referências</h2>
@@ -1009,13 +916,50 @@
         <p>JANDRIĆ, P.; KNOX, J. The postdigital turn: Philosophy, education, research. <em>Policy Futures in Education</em>, 2022.</p>
         <p>MONTE MÓR, W. Sociedade da Escrita e Sociedade Digital. In: TAKAKI; MONTE MÓR (orgs). <em>Construções de Sentido e Letramento Digital Crítico</em>. Pontes, 2017.</p>
       </div>
+
+      <!-- SEÇÃO TESTE -->
+      <div id="quizSection" class="content-section">
+        <div class="section-sub">TESTE SEUS CONHECIMENTOS</div>
+        <h2 class="section-title">📝 Como se diz "olá" em mandarim?</h2>
+        
+        <div class="quiz-container" style="background: rgba(30,30,30,0.6); border-radius: 24px; padding: 2rem; margin: 2rem 0;">
+          <div class="quiz-options" style="display: flex; flex-direction: column; gap: 1rem;">
+            
+            <button class="quiz-option" data-answer="bāxī" style="background: var(--surface); border: 2px solid var(--border); border-radius: 60px; padding: 1rem 2rem; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; font-family: inherit; color: var(--text); text-align: left;">
+              🇧🇷 A) bāxī (巴西)
+            </button>
+            
+            <button class="quiz-option" data-answer="māo" style="background: var(--surface); border: 2px solid var(--border); border-radius: 60px; padding: 1rem 2rem; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; font-family: inherit; color: var(--text); text-align: left;">
+              🐱 B) māo (猫)
+            </button>
+            
+            <button class="quiz-option" data-answer="xièxiè" style="background: var(--surface); border: 2px solid var(--border); border-radius: 60px; padding: 1rem 2rem; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; font-family: inherit; color: var(--text); text-align: left;">
+              🙏 C) xièxiè (谢谢)
+            </button>
+            
+            <button class="quiz-option" data-answer="nǐhǎo" style="background: var(--surface); border: 2px solid var(--border); border-radius: 60px; padding: 1rem 2rem; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; font-family: inherit; color: var(--text); text-align: left;">
+              👋 D) nǐhǎo (你好)
+            </button>
+          </div>
+          
+          <div id="quizFeedback" style="margin-top: 2rem; padding: 1rem; border-radius: 16px; text-align: center; font-weight: 500; min-height: 80px;"></div>
+          
+          <button id="resetQuizBtn" style="background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 40px; padding: 0.8rem 1.5rem; margin-top: 1rem; cursor: pointer; color: var(--text); transition: all 0.3s ease; display: none;">
+            🔄 Tentar novamente
+          </button>
+        </div>
+        
+        <div class="info-card">
+          <p>💡 <strong>Dica:</strong> "Nǐ hǎo" (你好) é a saudação padrão em mandarim, usada para dizer "olá". As outras opções significam: <strong>bāxī</strong> (Brasil), <strong>māo</strong> (gato) e <strong>xièxiè</strong> (obrigado).</p>
+        </div>
+      </div>
       
     </div>
   </div>
 </div>
 
 <script>
-  // ========== CARACTERES FLUTUANTES NO FUNDO ==========
+  // Caracteres flutuantes
   const chineseChars = ['学', '中', '文', '你', '好', '拼', '音', '汉', '字', '语', '言', '书', '法', '道', '龙', '风', '山', '水', '明', '天', '地', '人', '和', '气'];
   
   function createFloatingChars() {
@@ -1050,27 +994,16 @@
   const styleSheet = document.createElement("style");
   styleSheet.textContent = `
     @keyframes floatChar {
-      0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.08;
-      }
-      90% {
-        opacity: 0.08;
-      }
-      100% {
-        transform: translateY(-20vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.08; }
+      90% { opacity: 0.08; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
     }
   `;
   document.head.appendChild(styleSheet);
   
   createFloatingChars();
 
-  // ========== FUNÇÃO PARA TOCAR O SOM DO "NǏ HǍO" ==========
   function playNiHaoSound() {
     const indicator = document.getElementById('soundIndicator');
     indicator.classList.add('show');
@@ -1141,7 +1074,6 @@
     }
   }
   
-  // ========== SPLASH SCREEN INTERATIVA ==========
   const splashScreen = document.getElementById('splashScreen');
   const mainApp = document.getElementById('mainApp');
   const helloBtn = document.getElementById('helloBtn');
@@ -1165,7 +1097,6 @@
     }, 800);
   });
 
-  // ========== NAVEGAÇÃO DOS PORTAIS ==========
   const homeScreenDiv = document.getElementById('homeScreen');
   const overlay = document.getElementById('contentOverlay');
   const closeBtn = document.getElementById('closeOverlayBtn');
@@ -1228,7 +1159,6 @@
     }
   });
 
-  // ========== INSIGHTS EXPANSÍVEIS ==========
   function toggleInsight(card) {
     card.classList.toggle('open');
   }
@@ -1237,6 +1167,66 @@
     if (e.key === 'Escape' && overlay.classList.contains('open')) {
       closeOverlay();
     }
+  });
+
+  // ========== FUNCIONALIDADE DO QUIZ ==========
+  let quizAnswered = false;
+  
+  document.querySelectorAll('.quiz-option').forEach(option => {
+    option.addEventListener('click', function() {
+      if (quizAnswered) return;
+      
+      const selectedAnswer = this.getAttribute('data-answer');
+      const feedbackDiv = document.getElementById('quizFeedback');
+      const resetBtn = document.getElementById('resetQuizBtn');
+      
+      if (selectedAnswer === 'nǐhǎo') {
+        this.style.background = 'linear-gradient(135deg, #2A9D8F, #1B6B5E)';
+        this.style.borderColor = '#2A9D8F';
+        feedbackDiv.innerHTML = '✅ <strong>Correto!</strong> "Nǐ hǎo" (你好) significa "olá" em mandarim! 🎉<br><br>Parabéns! Você acertou.';
+        feedbackDiv.style.background = 'rgba(42, 157, 143, 0.2)';
+        feedbackDiv.style.border = '1px solid #2A9D8F';
+        feedbackDiv.style.color = '#2A9D8F';
+        quizAnswered = true;
+        resetBtn.style.display = 'inline-block';
+        
+        playNiHaoSound();
+      } else {
+        this.style.background = 'rgba(231, 111, 81, 0.2)';
+        this.style.borderColor = '#E76F51';
+        
+        let message = '';
+        if (selectedAnswer === 'bāxī') message = '❌ "Bāxī" (巴西) significa "Brasil", não "olá".';
+        else if (selectedAnswer === 'māo') message = '❌ "Māo" (猫) significa "gato", não "olá".';
+        else if (selectedAnswer === 'xièxiè') message = '❌ "Xièxiè" (谢谢) significa "obrigado", não "olá".';
+        
+        feedbackDiv.innerHTML = `${message}<br><br>Tente novamente! 💪`;
+        feedbackDiv.style.background = 'rgba(231, 111, 81, 0.15)';
+        feedbackDiv.style.border = '1px solid #E76F51';
+        feedbackDiv.style.color = '#E76F51';
+        
+        this.disabled = true;
+        this.style.opacity = '0.6';
+        this.style.cursor = 'not-allowed';
+      }
+    });
+  });
+  
+  document.getElementById('resetQuizBtn').addEventListener('click', function() {
+    quizAnswered = false;
+    this.style.display = 'none';
+    
+    document.getElementById('quizFeedback').innerHTML = '';
+    document.getElementById('quizFeedback').style.background = '';
+    document.getElementById('quizFeedback').style.border = '';
+    
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.style.background = '';
+      option.style.borderColor = '';
+      option.disabled = false;
+      option.style.opacity = '1';
+      option.style.cursor = 'pointer';
+    });
   });
 </script>
 </body>
