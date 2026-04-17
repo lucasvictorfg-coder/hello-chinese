@@ -498,6 +498,63 @@
     border-left: 3px solid var(--primary);
   }
 
+  .download-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0 1rem;
+  }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #1A1A1A 0%, #0D0D0D 100%);
+    border: 2px solid var(--primary);
+    border-radius: 60px;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(232, 93, 4, 0.2);
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-download:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+    border-color: var(--primary-light);
+    box-shadow: 0 8px 25px rgba(232, 93, 4, 0.4);
+  }
+
+  .btn-download:active {
+    transform: translateY(0);
+  }
+
+  .btn-download img, .btn-download .google-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+  }
+
+  .btn-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+  }
+
+  .btn-text small {
+    font-size: 0.7rem;
+    font-weight: normal;
+    color: var(--text-secondary);
+  }
+
+  .btn-text span {
+    font-size: 1.2rem;
+  }
+
   .theory-block {
     background: rgba(18, 18, 18, 0.8);
     backdrop-filter: blur(4px);
@@ -817,6 +874,17 @@
       font-size: 1rem;
       padding: 0.8rem 1.5rem;
     }
+    .btn-download {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
+    }
+    .btn-text span {
+      font-size: 1rem;
+    }
+    .btn-download img, .btn-download .google-icon {
+      width: 22px;
+      height: 22px;
+    }
   }
 </style>
 </head>
@@ -919,6 +987,20 @@
           <p><strong>Lançamento:</strong> 2015 · <strong>Plataformas:</strong> iOS / Android · <strong>Modelo:</strong> Freemium</p>
           <p>Especializado em mandarim para iniciantes e intermediários. Diferente de apps generalistas, foi construído inteiramente em torno das especificidades do chinês: tons, hanzi, pinyin e estrutura gramatical radicalmente diferente das línguas ocidentais.</p>
         </div>
+        
+        <!-- Botão de download adicionado aqui -->
+        <div class="download-button-container">
+          <a href="https://play.google.com/store/search?q=hello%20chinese&c=apps" target="_blank" rel="noopener noreferrer" class="btn-download">
+            <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="white">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186c-.117-.287-.19-.6-.19-.93v-18.5c0-.33.073-.643.19-.93zM14.535 12.707l3.061 3.061-7.752 4.408 4.691-7.469zM4.228 22.515c.219.153.47.267.74.332l8.675-8.674-2.814-2.814-6.601 9.156zM22.084 11.141c.257.56.398 1.17.398 1.809 0 .64-.141 1.25-.398 1.809l-3.799 2.191-3.652-3.652.772-1.229.772-1.229-3.653-3.653 3.652-3.652 3.799 2.191c.257.559.398 1.169.398 1.809 0 .639-.141 1.249-.398 1.808l-.001.001zM4.967 1.469c.27.065.521.179.74.332L12.309 11.9 9.495 14.714 4.967 1.469z"/>
+            </svg>
+            <div class="btn-text">
+              <small>BAIXAR NA</small>
+              <span>Google Play</span>
+            </div>
+          </a>
+        </div>
+        
         <div class="feature-grid-mini">
           <div class="feature-item">🎙️ Reconhecimento de voz com análise de tons em tempo real</div>
           <div class="feature-item">✍️ Escrita de caracteres com ordem de traços e feedback háptico</div>
@@ -961,52 +1043,56 @@
         <div class="ref-quote">"Não estamos mais em um mundo onde o digital é separado da vida humana 'natural'." — Jandrić et al. (2018)</div>
       </div>
 
-      <!-- SEÇÃO DE VÍDEOS COM SUPORTE A YOUTUBE E SHORTS -->
-    <div id="videosSection" class="content-section">
-  <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
-  <h2 class="section-title">Vídeos de apresentação</h2>
-  
-  <div class="info-card" style="background: rgba(232,93,4,0.15); border-color: var(--primary); margin-bottom: 1.5rem;">
-    <p>🎬 <strong>Seus vídeos do YouTube:</strong> Cole as URLs abaixo. Os vídeos ficam salvos automaticamente!</p>
-  </div>
-  
-  <div class="video-grid">
-    <!-- VÍDEO 1 -->
-    <div class="video-card">
-      <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
-      <div id="video1Container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #666;">
-          <p>📹 Nenhum vídeo carregado</p>
+      <!-- SEÇÃO DE VÍDEOS COM VÍDEO 2 PRÉ-CARREGADO -->
+      <div id="videosSection" class="content-section">
+        <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
+        <h2 class="section-title">Vídeos de apresentação</h2>
+        
+        <div class="info-card" style="background: rgba(232,93,4,0.1); border-color: var(--primary); margin-bottom: 1rem;">
+          <p>📹 <strong>YouTube Shorts / Vídeos normais</strong><br>
+          Cole a URL do seu vídeo do YouTube (normal ou Short) nos campos abaixo. O vídeo será salvo automaticamente e não precisará ser reinserido.</p>
         </div>
-      </div>
-      <div class="video-caption">
-        📌 Análise crítica do HelloChinese na era pós-digital.
-        <br><br>
-        <input type="text" id="youtubeUrl1" style="width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid #2a2a2a; color: white; border-radius: 8px;" placeholder="Cole a URL do YouTube aqui">
-        <button onclick="carregarVideoYouTube('1')" style="margin-top: 10px; background: #E85D04; border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">▶ CARREGAR VÍDEO</button>
-        <div id="status1" style="margin-top: 8px; font-size: 12px;"></div>
-      </div>
-    </div>
-    
-    <!-- VÍDEO 2 -->
-    <div class="video-card">
-      <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
-      <div id="https://www.youtube.com/shorts/DzWtUJGrfa4" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000;">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #666;">
-          <p>📹 Nenhum vídeo carregado</p>
+        
+        <div class="video-grid">
+          <!-- Vídeo 1 -->
+          <div class="video-card">
+            <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
+            <div id="video1Container" class="video-wrapper">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
+                <p>📹 Aguardando URL</p>
+                <p style="font-size: 12px; margin-top: 8px;">https://www.youtube.com/shorts/bpVWv-iIK9Q</p>
+              </div>
+            </div>
+            <div class="video-caption">
+              📌 Análise crítica do HelloChinese na era pós-digital.
+              <br>
+              <input type="text" id="youtubeUrl1" class="video-url-input" placeholder="Ex: https://www.youtube.com/shorts/bpVWv-iIK9Q">
+              <button onclick="loadYouTubeVideo('1')" class="load-video-btn">▶ Carregar Vídeo</button>
+              <div id="videoStatus1" class="video-status"></div>
+            </div>
+          </div>
+          
+          <!-- Vídeo 2 com URL pré-definida e carregamento automático -->
+          <div class="video-card">
+            <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
+            <div id="video2Container" class="video-wrapper">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
+                <p>📹 Aguardando URL</p>
+                <p style="font-size: 12px; margin-top: 8px;">Carregando vídeo de demonstração...</p>
+              </div>
+            </div>
+            <div class="video-caption">
+              🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.
+              <br>
+              <input type="text" id="youtubeUrl2" class="video-url-input" placeholder="Ex: https://youtu.be/ABCD1234 ou https://youtube.com/shorts/ABCD1234" value="https://youtube.com/shorts/DzWtUJGrfa4">
+              <button onclick="loadYouTubeVideo('2')" class="load-video-btn">▶ Carregar Vídeo</button>
+              <div id="videoStatus2" class="video-status"></div>
+            </div>
+          </div>
         </div>
+        <hr>
       </div>
-      <div class="video-caption">
-        🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.
-        <br><br>
-        <input type="text" id="youtubeUrl2" style="width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid #2a2a2a; color: white; border-radius: 8px;" placeholder="Cole a URL do YouTube aqui">
-        <button onclick="carregarVideoYouTube('2')" style="margin-top: 10px; background: #E85D04; border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: bold;">▶ CARREGAR VÍDEO</button>
-        <div id="status2" style="margin-top: 8px; font-size: 12px;"></div>
-      </div>
-    </div>
-  </div>
-  <hr>
-</div>
+
       <div id="insightsSection" class="content-section">
         <div class="section-sub">DESCOBERTAS</div>
         <h2 class="section-title">Insights</h2>
@@ -1380,41 +1466,68 @@
 
   // ========== CARREGAR VÍDEOS SALVOS AO INICIAR ==========
   function loadSavedVideos() {
-    for (let i = 1; i <= 2; i++) {
-      const savedUrl = localStorage.getItem(`youtubeVideo${i}`);
-      if (savedUrl) {
-        const urlInput = document.getElementById(`youtubeUrl${i}`);
-        if (urlInput) {
-          urlInput.value = savedUrl;
-          // Carregar o vídeo automaticamente
-          const container = document.getElementById(`video${i}Container`);
-          const videoId = getYouTubeId(savedUrl);
-          if (videoId && container) {
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.youtube.com/embed/${videoId}`;
-            iframe.title = `Vídeo ${i} - HelloChinese`;
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
-            container.innerHTML = '';
-            container.appendChild(iframe);
-            
-            // Mostrar status de carregado
-            const statusDiv = document.getElementById(`videoStatus${i}`);
-            if (statusDiv) {
-              const isShort = savedUrl.includes('/shorts/');
-              statusDiv.innerHTML = isShort ? '📱 Vídeo Short carregado automaticamente' : '🎬 Vídeo carregado automaticamente';
-              statusDiv.className = 'video-status saved';
-              setTimeout(() => {
-                statusDiv.innerHTML = '';
-                statusDiv.className = 'video-status';
-              }, 3000);
+    // Carregar vídeo 1 do localStorage se existir
+    const savedUrl1 = localStorage.getItem('youtubeVideo1');
+    if (savedUrl1) {
+      const urlInput1 = document.getElementById('youtubeUrl1');
+      if (urlInput1) {
+        urlInput1.value = savedUrl1;
+        const container1 = document.getElementById('video1Container');
+        const videoId1 = getYouTubeId(savedUrl1);
+        if (videoId1 && container1) {
+          const iframe1 = document.createElement('iframe');
+          iframe1.src = `https://www.youtube.com/embed/${videoId1}`;
+          iframe1.title = `Vídeo 1 - HelloChinese`;
+          iframe1.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe1.allowFullscreen = true;
+          container1.innerHTML = '';
+          container1.appendChild(iframe1);
+        }
+      }
+    }
+    
+    // Carregar vídeo 2 (com URL padrão e também verificar localStorage)
+    const savedUrl2 = localStorage.getItem('youtubeVideo2');
+    let urlToLoad = 'https://youtube.com/shorts/DzWtUJGrfa4';
+    
+    if (savedUrl2) {
+      urlToLoad = savedUrl2;
+    }
+    
+    const urlInput2 = document.getElementById('youtubeUrl2');
+    if (urlInput2) {
+      urlInput2.value = urlToLoad;
+      const container2 = document.getElementById('video2Container');
+      const videoId2 = getYouTubeId(urlToLoad);
+      if (videoId2 && container2) {
+        const iframe2 = document.createElement('iframe');
+        iframe2.src = `https://www.youtube.com/embed/${videoId2}`;
+        iframe2.title = `Vídeo 2 - HelloChinese`;
+        iframe2.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe2.allowFullscreen = true;
+        container2.innerHTML = '';
+        container2.appendChild(iframe2);
+        
+        // Salvar a URL padrão no localStorage se não existir
+        if (!savedUrl2) {
+          localStorage.setItem('youtubeVideo2', urlToLoad);
+        }
+        
+        const statusDiv2 = document.getElementById('videoStatus2');
+        if (statusDiv2) {
+          statusDiv2.innerHTML = '📱 Vídeo Short carregado automaticamente!';
+          statusDiv2.className = 'video-status saved';
+          setTimeout(() => {
+            if (statusDiv2.innerHTML !== '') {
+              statusDiv2.innerHTML = '';
+              statusDiv2.className = 'video-status';
             }
-          }
+          }, 4000);
         }
       }
     }
   }
-
+  
   // ========== FUNCIONALIDADE DO QUIZ ==========
   let quizAnswered = false;
   
@@ -1480,99 +1593,6 @@
   
   // Carregar vídeos salvos ao iniciar
   loadSavedVideos();
-   // Função para extrair o ID do YouTube
-  function extrairYouTubeId(url) {
-    if (!url) return null;
-    
-    // Para Shorts: youtube.com/shorts/ID
-    let match = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    // Para URLs normais: youtu.be/ID ou youtube.com/watch?v=ID
-    match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    return null;
-  }
-
-  // Função para carregar o vídeo
-  function carregarVideoYouTube(numero) {
-    const urlInput = document.getElementById(`youtubeUrl${numero}`);
-    const url = urlInput.value.trim();
-    const container = document.getElementById(`video${numero}Container`);
-    const statusDiv = document.getElementById(`status${numero}`);
-    
-    if (!url) {
-      alert('Por favor, cole a URL do YouTube');
-      return;
-    }
-    
-    const videoId = extrairYouTubeId(url);
-    
-    if (!videoId) {
-      statusDiv.innerHTML = '❌ URL inválida! Use o formato do YouTube';
-      statusDiv.style.color = '#E76F51';
-      setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
-      return;
-    }
-    
-    // Criar o iframe do YouTube
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    
-    // Limpar e adicionar o vídeo
-    container.innerHTML = '';
-    container.appendChild(iframe);
-    
-    // Salvar no localStorage
-    localStorage.setItem(`videoSalvo${numero}`, url);
-    
-    // Feedback
-    statusDiv.innerHTML = '✅ Vídeo carregado com sucesso!';
-    statusDiv.style.color = '#2A9D8F';
-    setTimeout(() => { statusDiv.innerHTML = ''; }, 3000);
-  }
-
-  // Carregar vídeos salvos automaticamente
-  function carregarVideosSalvos() {
-    for (let i = 1; i <= 2; i++) {
-      const urlSalva = localStorage.getItem(`videoSalvo${i}`);
-      if (urlSalva) {
-        const urlInput = document.getElementById(`youtubeUrl${i}`);
-        if (urlInput) {
-          urlInput.value = urlSalva;
-          
-          const videoId = extrairYouTubeId(urlSalva);
-          if (videoId) {
-            const container = document.getElementById(`video${i}Container`);
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.youtube.com/embed/${videoId}`;
-            iframe.style.position = 'absolute';
-            iframe.style.top = '0';
-            iframe.style.left = '0';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
-            container.innerHTML = '';
-            container.appendChild(iframe);
-          }
-        }
-      }
-    }
-  }
-  
-  // Executar ao carregar a página
-  carregarVideosSalvos();
 </script>
 </body>
 </html>
