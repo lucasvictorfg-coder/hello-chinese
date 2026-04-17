@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>HelloChinese · Pós-Digital · 中文</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>HelloChinese · Pós-Digital · Modo Socrático + Crítico</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   * {
     margin: 0;
@@ -31,6 +31,8 @@
     --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
     --shadow-lg: 0 20px 40px rgba(0,0,0,0.5);
     --transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    --critical-red: rgba(231, 111, 81, 0.3);
+    --critical-border: #E76F51;
   }
 
   body {
@@ -42,6 +44,351 @@
     min-height: 100vh;
   }
 
+  body.critical-mode {
+    --primary: #E76F51;
+    --primary-light: #F4A261;
+    --border: #E76F51;
+  }
+
+  body.critical-mode .portal-card {
+    border-color: var(--critical-border);
+    box-shadow: 0 0 15px rgba(231, 111, 81, 0.3);
+  }
+
+  body.critical-mode .portal-card::before {
+    background: linear-gradient(90deg, var(--accent-red), var(--primary));
+  }
+
+  body.critical-mode .hero-badge {
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+    animation: pulseWarning 1.5s infinite;
+  }
+
+  @keyframes pulseWarning {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; text-shadow: 0 0 5px var(--accent-red); }
+  }
+
+  .critical-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    background: var(--surface-elevated);
+    border: 2px solid var(--primary);
+    border-radius: 40px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Space Grotesk', monospace;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: var(--transition);
+    color: var(--text);
+    backdrop-filter: blur(8px);
+  }
+
+  .critical-toggle:hover {
+    transform: scale(1.05);
+    background: var(--primary);
+    color: white;
+  }
+
+  .critical-toggle.active {
+    background: var(--primary);
+    border-color: var(--accent-red);
+    animation: pulseWarning 1.5s infinite;
+  }
+
+  /* Tooltips críticos - VERSÃO CORRIGIDA FUNCIONAL */
+  .critical-tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 2px dotted var(--primary);
+  }
+
+  /* Tooltip via CSS - funciona em navegadores modernos */
+  .critical-tooltip:hover::after {
+    content: attr(data-critical);
+    position: absolute;
+    bottom: 140%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a0a0a;
+    border: 2px solid var(--accent-red);
+    color: var(--accent-red);
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: normal;
+    width: 260px;
+    z-index: 9999;
+    font-family: 'Space Grotesk', monospace;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .critical-tooltip:hover::after {
+      bottom: auto;
+      top: -10px;
+      transform: translateX(-50%) translateY(-100%);
+    }
+  }
+
+  .critical-label {
+    display: none;
+  }
+
+  body.critical-mode .critical-label {
+    display: inline-block;
+    background: var(--critical-border);
+    color: white;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  /* Popup Socrático */
+  .socratic-popup {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
+    border-left: 4px solid var(--primary);
+    border-radius: 16px;
+    padding: 1.2rem;
+    max-width: 320px;
+    z-index: 2000;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .socratic-popup.show {
+    transform: translateX(0);
+  }
+
+  .socratic-question {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .socratic-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .socratic-btn {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: var(--transition);
+    color: var(--text);
+    font-family: inherit;
+  }
+
+  .socratic-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .socratic-feedback-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(42, 157, 143, 0.9);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-size: 0.8rem;
+    z-index: 2001;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .socratic-feedback-toast.show {
+    opacity: 1;
+  }
+
+  /* Game Modal */
+  .game-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .game-modal.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .game-container {
+    background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+    border: 3px solid var(--primary);
+    border-radius: 24px;
+    padding: 1.5rem;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+  }
+
+  .game-canvas {
+    background: #0a0a0a;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  .game-controls {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .game-btn {
+    background: var(--surface-elevated);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 40px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    transition: var(--transition);
+  }
+
+  .game-btn:hover {
+    background: var(--primary);
+  }
+
+  .game-score {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--primary-light);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .game-over-message {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--accent-red);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .close-game {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .game-button-portal {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 40px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 1rem auto;
+    display: inline-block;
+    transition: var(--transition);
+  }
+
+  .game-button-portal:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(232, 93, 4, 0.5);
+  }
+
+  .voice-dialog {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--primary);
+    border-radius: 20px;
+    padding: 1rem;
+    max-width: 300px;
+    z-index: 200;
+    transform: translateX(-120%);
+    transition: transform 0.4s ease;
+  }
+
+  .voice-dialog.show {
+    transform: translateX(0);
+  }
+
+  .voice-text {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .voice-close {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.7rem;
+  }
+
+  .voice-indicator-small {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 201;
+    transition: var(--transition);
+  }
+
+  .voice-indicator-small:hover {
+    transform: scale(1.1);
+  }
+
+  /* Resto do CSS */
   .chinese-bg {
     position: fixed;
     top: 0;
@@ -528,10 +875,6 @@
     box-shadow: 0 8px 25px rgba(232, 93, 4, 0.4);
   }
 
-  .btn-download:active {
-    transform: translateY(0);
-  }
-
   .btn-download img, .btn-download .google-icon {
     width: 28px;
     height: 28px;
@@ -848,43 +1191,18 @@
   }
 
   @media (max-width: 768px) {
-    .app-container {
-      padding: 1rem;
-    }
-    .portals-grid {
-      grid-template-columns: 1fr;
-    }
-    .tension-dual {
-      grid-template-columns: 1fr;
-    }
-    .content-container {
-      padding: 1rem;
-    }
-    .choice-buttons {
-      gap: 1rem;
-    }
-    .choice-btn {
-      padding: 0.8rem 1.5rem;
-      font-size: 1.2rem;
-    }
-    .video-grid {
-      grid-template-columns: 1fr;
-    }
-    .quiz-option {
-      font-size: 1rem;
-      padding: 0.8rem 1.5rem;
-    }
-    .btn-download {
-      padding: 0.8rem 1.5rem;
-      font-size: 0.9rem;
-    }
-    .btn-text span {
-      font-size: 1rem;
-    }
-    .btn-download img, .btn-download .google-icon {
-      width: 22px;
-      height: 22px;
-    }
+    .app-container { padding: 1rem; }
+    .portals-grid { grid-template-columns: 1fr; }
+    .tension-dual { grid-template-columns: 1fr; }
+    .content-container { padding: 1rem; }
+    .choice-buttons { gap: 1rem; }
+    .choice-btn { padding: 0.8rem 1.5rem; font-size: 1.2rem; }
+    .video-grid { grid-template-columns: 1fr; }
+    .quiz-option { font-size: 1rem; padding: 0.8rem 1.5rem; }
+    .critical-toggle { top: 10px; right: 10px; font-size: 0.7rem; padding: 0.3rem 0.8rem; }
+    .socratic-popup { bottom: 80px; right: 10px; max-width: 280px; }
+    .voice-indicator-small { bottom: 80px; }
+    .voice-dialog { bottom: 130px; }
   }
 </style>
 </head>
@@ -895,6 +1213,44 @@
   <div class="chop-seal"></div>
   <div class="scroll-border"></div>
   <div id="floatingChars"></div>
+</div>
+
+<!-- Botão Modo Crítico -->
+<button class="critical-toggle" id="criticalToggle">🔍 Modo Crítico OFF</button>
+
+<!-- Voice Dialog -->
+<div class="voice-indicator-small" id="voiceIndicatorBtn">🗣️</div>
+<div class="voice-dialog" id="voiceDialog">
+  <div class="voice-text" id="voiceText">🎙️ Clique para ouvir uma análise crítica do conteúdo.</div>
+  <button class="voice-close" id="voiceClose">✕ fechar</button>
+</div>
+
+<!-- Popup Socrático -->
+<div id="socraticPopup" class="socratic-popup">
+  <div class="socratic-question" id="socraticQuestion">🤔 Você acredita que este app vai te ensinar chinês sozinho?</div>
+  <div class="socratic-buttons">
+    <button class="socratic-btn" id="socraticYes">Sim</button>
+    <button class="socratic-btn" id="socraticNo">Não</button>
+    <button class="socratic-btn" id="socraticDismiss">Agora não</button>
+  </div>
+</div>
+
+<div id="socraticToast" class="socratic-feedback-toast"></div>
+
+<!-- Game Modal -->
+<div class="game-modal" id="gameModal">
+  <div class="game-container">
+    <button class="close-game" id="closeGameBtn">✕</button>
+    <h3 style="margin-bottom: 1rem;">🎮 DESVIE DO ALGORITMO 🎮</h3>
+    <div class="game-score" id="gameScore">SCORE: 0</div>
+    <canvas id="gameCanvas" class="game-canvas" width="600" height="400"></canvas>
+    <div class="game-controls">
+      <button class="game-btn" id="startGameBtn">▶ INICIAR</button>
+      <button class="game-btn" id="pauseGameBtn">⏸ PAUSAR</button>
+    </div>
+    <div class="game-over-message" id="gameOverMsg"></div>
+    <p style="font-size: 0.7rem; margin-top: 1rem; color: var(--text-muted);">⬆️ Clique no canvas ou use ESPAÇO para pular! Desvie de ❌ pontos, rankings e notificações. Colete ✅ reflexão e cultura!</p>
+  </div>
 </div>
 
 <div id="splashScreen" class="splash-screen">
@@ -918,6 +1274,8 @@
     <div class="hero-badge">UNIVERSIDADE FEDERAL DE SERGIPE · PPGED</div>
     <h1 class="hero-title">Hello<span>Chinese</span><br>na era pós-digital</h1>
     <p class="hero-sub">Uma análise crítica entre gamificação, performance e ensino das máquina</p>
+    
+    <button class="game-button-portal" id="openGameBtn">🎮 JOGAR: Desvie do Algoritmo 🎮</button>
     
     <div class="portals-grid">
       <div class="portal-card" data-section="platform">
@@ -980,17 +1338,17 @@
         <button class="nav-dot" data-nav="quiz">📝 Teste</button>
       </div>
 
+      <!-- PLATAFORMA SECTION COM TOOLTIPS CORRIGIDOS -->
       <div id="platformSection" class="content-section">
         <div class="section-sub">ANÁLISE DO OBJETO</div>
-        <h2 class="section-title">HelloChinese: estrutura e proposta</h2>
-        <div class="info-card">
+        <h2 class="section-title critical-tooltip" data-critical="⚠️ Objeto de análise: uma máquina com valores embutidos">HelloChinese: estrutura e proposta</h2>
+        <div class="info-card critical-tooltip" data-critical="⚠️ Freemium: o modelo de negócio por trás da 'gratuidade'">
           <p><strong>Lançamento:</strong> 2015 · <strong>Plataformas:</strong> iOS / Android · <strong>Modelo:</strong> Freemium</p>
           <p>Especializado em mandarim para iniciantes e intermediários. Diferente de apps generalistas, foi construído inteiramente em torno das especificidades do chinês: tons, hanzi, pinyin e estrutura gramatical radicalmente diferente das línguas ocidentais.</p>
         </div>
         
-        <!-- Botão de download adicionado aqui -->
         <div class="download-button-container">
-          <a href="https://play.google.com/store/search?q=hello%20chinese&c=apps" target="_blank" rel="noopener noreferrer" class="btn-download">
+          <a href="https://play.google.com/store/search?q=hello%20chinese&c=apps" target="_blank" rel="noopener noreferrer" class="btn-download critical-tooltip" data-critical="⚠️ Você está sendo conduzido pelo algoritmo da loja?">
             <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="white">
               <path d="M3.609 1.814L13.792 12 3.61 22.186c-.117-.287-.19-.6-.19-.93v-18.5c0-.33.073-.643.19-.93zM14.535 12.707l3.061 3.061-7.752 4.408 4.691-7.469zM4.228 22.515c.219.153.47.267.74.332l8.675-8.674-2.814-2.814-6.601 9.156zM22.084 11.141c.257.56.398 1.17.398 1.809 0 .64-.141 1.25-.398 1.809l-3.799 2.191-3.652-3.652.772-1.229.772-1.229-3.653-3.653 3.652-3.652 3.799 2.191c.257.559.398 1.169.398 1.809 0 .639-.141 1.249-.398 1.808l-.001.001zM4.967 1.469c.27.065.521.179.74.332L12.309 11.9 9.495 14.714 4.967 1.469z"/>
             </svg>
@@ -1002,19 +1360,19 @@
         </div>
         
         <div class="feature-grid-mini">
-          <div class="feature-item">🎙️ Reconhecimento de voz com análise de tons em tempo real</div>
-          <div class="feature-item">✍️ Escrita de caracteres com ordem de traços e feedback háptico</div>
-          <div class="feature-item">🏆 Gamificação: sequências, ligas, moedas</div>
-          <div class="feature-item">📴 Modo offline para estudo sem internet</div>
+          <div class="feature-item critical-tooltip" data-critical="⚠️ Machine behaviourism: o app 'corrige' sem explicar o porquê">🎙️ Reconhecimento de voz com análise de tons</div>
+          <div class="feature-item critical-tooltip" data-critical="⚠️ A ordem dos traços é importante, mas o app não ensina caligrafia como arte">✍️ Escrita de caracteres com ordem de traços</div>
+          <div class="feature-item critical-tooltip" data-critical="⚠️ Gamificação: o que mantém você preso não é o desejo de aprender">🏆 Gamificação: sequências, ligas, moedas</div>
+          <div class="feature-item critical-tooltip" data-critical="⚠️ Modo offline: você ainda está dentro da lógica do app">📴 Modo offline para estudo sem internet</div>
         </div>
         <p>O aplicativo combina micro-lições de 5–10 minutos, prática de pronúncia e um sistema de progressão linear.</p>
       </div>
 
       <div id="experienceSection" class="content-section">
         <div class="section-sub">PERCURSO AUTODIDATA</div>
-        <h2 class="section-title">Minha experiência com o app</h2>
+        <h2 class="section-title critical-tooltip" data-critical="⚠️ Quem está no controle? Você ou o algoritmo?">Minha experiência com o app</h2>
         <p>Comecei a usar o HelloChinese sem instrução formal, movido por curiosidade pela cultura chinesa. Iniciei o uso do aplicativo há 30 dias e estou conciliando-o com videoaulas de mandarim no YouTube.</p>
-        <div class="info-card">
+        <div class="info-card critical-tooltip" data-critical="⚠️ A tensão entre jogar e aprender é a chave da crítica pós-digital">
           <p><strong>Tensão percebida:</strong> a gamificação me mantinha voltando todos os dias, mas comecei a questionar se estava realmente aprendendo ou apenas 'jogando'.</p>
         </div>
         <p>Essa dissociação entre progresso no app e competência linguística real é o ponto de partida para a análise crítica.</p>
@@ -1043,48 +1401,42 @@
         <div class="ref-quote">"Não estamos mais em um mundo onde o digital é separado da vida humana 'natural'." — Jandrić et al. (2018)</div>
       </div>
 
-      <!-- SEÇÃO DE VÍDEOS COM VÍDEO 2 PRÉ-CARREGADO -->
       <div id="videosSection" class="content-section">
         <div class="section-sub">PRODUÇÃO AUDIOVISUAL</div>
         <h2 class="section-title">Vídeos de apresentação</h2>
         
         <div class="info-card" style="background: rgba(232,93,4,0.1); border-color: var(--primary); margin-bottom: 1rem;">
-          <p>📹 <strong>YouTube Shorts / Vídeos normais</strong><br>
-          Cole a URL do seu vídeo do YouTube (normal ou Short) nos campos abaixo. O vídeo será salvo automaticamente e não precisará ser reinserido.</p>
+          <p>📹 <strong>YouTube Shorts / Vídeos normais</strong><br>Cole a URL do seu vídeo do YouTube nos campos abaixo.</p>
         </div>
         
         <div class="video-grid">
-          <!-- Vídeo 1 -->
           <div class="video-card">
             <div class="video-label">🎤 VÍDEO 1 · APRESENTAÇÃO FALADA</div>
             <div id="video1Container" class="video-wrapper">
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
                 <p>📹 Aguardando URL</p>
-                <p style="font-size: 12px; margin-top: 8px;">https://www.youtube.com/shorts/bpVWv-iIK9Q</p>
               </div>
             </div>
             <div class="video-caption">
               📌 Análise crítica do HelloChinese na era pós-digital.
               <br>
-              <input type="text" id="youtubeUrl1" class="video-url-input" placeholder="Ex: https://www.youtube.com/shorts/bpVWv-iIK9Q">
+              <input type="text" id="youtubeUrl1" class="video-url-input" placeholder="URL do YouTube">
               <button onclick="loadYouTubeVideo('1')" class="load-video-btn">▶ Carregar Vídeo</button>
               <div id="videoStatus1" class="video-status"></div>
             </div>
           </div>
           
-          <!-- Vídeo 2 com URL pré-definida e carregamento automático -->
           <div class="video-card">
             <div class="video-label">📱 VÍDEO 2 · DEMONSTRAÇÃO DO APLICATIVO</div>
             <div id="video2Container" class="video-wrapper">
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); text-align: center;">
-                <p>📹 Aguardando URL</p>
-                <p style="font-size: 12px; margin-top: 8px;">Carregando vídeo de demonstração...</p>
+                <p>📹 Carregando...</p>
               </div>
             </div>
             <div class="video-caption">
-              🎬 Demonstração prática: exercícios de tom, escrita de caracteres e gamificação.
+              🎬 Demonstração prática com análise crítica.
               <br>
-              <input type="text" id="youtubeUrl2" class="video-url-input" placeholder="Ex: https://youtu.be/ABCD1234 ou https://youtube.com/shorts/ABCD1234" value="https://youtube.com/shorts/DzWtUJGrfa4">
+              <input type="text" id="youtubeUrl2" class="video-url-input" value="https://youtube.com/shorts/DzWtUJGrfa4">
               <button onclick="loadYouTubeVideo('2')" class="load-video-btn">▶ Carregar Vídeo</button>
               <div id="videoStatus2" class="video-status"></div>
             </div>
@@ -1104,7 +1456,7 @@
             <span class="insight-toggle">▼</span>
           </div>
           <div class="insight-body">
-            <p>A gamificação do HelloChinese (pontos, sequências, rankings) é extremamente eficaz para manter o usuário engajado e retornando ao app diariamente. No entanto, essa mesma mecânica pode criar uma armadilha perigosa: o usuário começa a otimizar seu comportamento para <strong>ganhar pontos</strong> em vez de <strong>aprender mandarim</strong>.</p>
+            <p>A gamificação do HelloChinese (pontos, sequências, rankings) é extremamente eficaz para manter o usuário engajado. No entanto, pode criar uma armadilha: otimizar para <strong>ganhar pontos</strong> em vez de <strong>aprender mandarim</strong>.</p>
           </div>
         </div>
 
@@ -1126,7 +1478,7 @@
             <span class="insight-toggle">▼</span>
           </div>
           <div class="insight-body">
-            <p>Acredito que muita gente começa o HelloChinese achando que o app vai ser <strong>suficiente</strong> para aprender mandarim.</p>
+            <p>Muita gente começa o HelloChinese achando que o app vai ser <strong>suficiente</strong> para aprender mandarim — uma crença no determinismo tecnológico.</p>
           </div>
         </div>
       </div>
@@ -1152,7 +1504,6 @@
         <p>MONTE MÓR, W. Sociedade da Escrita e Sociedade Digital. In: TAKAKI; MONTE MÓR (orgs). <em>Construções de Sentido e Letramento Digital Crítico</em>. Pontes, 2017.</p>
       </div>
 
-      <!-- SEÇÃO TESTE -->
       <div id="quizSection" class="content-section">
         <div class="section-sub">TESTE SEUS CONHECIMENTOS</div>
         <h2 class="section-title">📝 Como se diz "olá" em mandarim?</h2>
@@ -1171,7 +1522,7 @@
         </div>
         
         <div class="info-card">
-          <p>💡 <strong>Dica:</strong> "Nǐ hǎo" (你好) é a saudação padrão em mandarim, usada para dizer "olá". As outras opções significam: <strong>bāxī</strong> (Brasil), <strong>māo</strong> (gato) e <strong>xièxiè</strong> (obrigado).</p>
+          <p>💡 <strong>Dica:</strong> "Nǐ hǎo" (你好) é a saudação padrão em mandarim.</p>
         </div>
       </div>
       
@@ -1180,13 +1531,340 @@
 </div>
 
 <script>
-  // Caracteres flutuantes
+  // ========== MODO CRÍTICO ==========
+  let criticalMode = false;
+  const criticalToggle = document.getElementById('criticalToggle');
+  
+  criticalToggle.addEventListener('click', () => {
+    criticalMode = !criticalMode;
+    if (criticalMode) {
+      document.body.classList.add('critical-mode');
+      criticalToggle.textContent = '🔍 Modo Crítico ON';
+      criticalToggle.classList.add('active');
+      // Mostra um toast de confirmação
+      showToastMessage('Modo Crítico ativado! Passe o mouse sobre os elementos com borda pontilhada para ver as críticas.', '#E76F51');
+    } else {
+      document.body.classList.remove('critical-mode');
+      criticalToggle.textContent = '🔍 Modo Crítico OFF';
+      criticalToggle.classList.remove('active');
+      showToastMessage('Modo Crítico desativado.', '#F4A261');
+    }
+  });
+  
+  function showToastMessage(msg, color) {
+    const toast = document.createElement('div');
+    toast.textContent = msg;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '100px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.backgroundColor = color;
+    toast.style.color = 'white';
+    toast.style.padding = '0.5rem 1rem';
+    toast.style.borderRadius = '40px';
+    toast.style.fontSize = '0.8rem';
+    toast.style.zIndex = '9999';
+    toast.style.fontFamily = "'Space Grotesk', monospace";
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+  
+  // ========== SÍNTESE DE VOZ ==========
+  let currentUtterance = null;
+  
+  function speakCritical(text, useRobotVoice = false) {
+    if (!window.speechSynthesis) return;
+    if (currentUtterance) window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'pt-BR';
+    utterance.rate = useRobotVoice ? 1.1 : 0.9;
+    utterance.pitch = useRobotVoice ? 0.3 : 1.0;
+    window.speechSynthesis.speak(utterance);
+    currentUtterance = utterance;
+  }
+  
+  function speakWithInterruption(humanText, robotText) {
+    if (!window.speechSynthesis) return;
+    if (currentUtterance) window.speechSynthesis.cancel();
+    
+    const humanUtterance = new SpeechSynthesisUtterance(humanText);
+    humanUtterance.lang = 'pt-BR';
+    humanUtterance.rate = 0.9;
+    humanUtterance.pitch = 1.0;
+    
+    humanUtterance.onend = () => {
+      setTimeout(() => {
+        const robotUtterance = new SpeechSynthesisUtterance(robotText);
+        robotUtterance.lang = 'pt-BR';
+        robotUtterance.rate = 1.2;
+        robotUtterance.pitch = 0.3;
+        window.speechSynthesis.speak(robotUtterance);
+      }, 500);
+    };
+    
+    window.speechSynthesis.speak(humanUtterance);
+    currentUtterance = humanUtterance;
+  }
+  
+  const voiceDialog = document.getElementById('voiceDialog');
+  const voiceIndicatorBtn = document.getElementById('voiceIndicatorBtn');
+  const voiceText = document.getElementById('voiceText');
+  const voiceClose = document.getElementById('voiceClose');
+  let currentSectionText = '';
+  
+  function updateVoiceForSection() {
+    const activeSection = document.querySelector('.content-section.active-section');
+    if (activeSection) {
+      const title = activeSection.querySelector('.section-title');
+      const text = activeSection.innerText.substring(0, 500);
+      currentSectionText = title ? title.innerText + '. ' + text : text;
+    } else {
+      currentSectionText = 'Bem-vindo ao HelloChinese na era pós-digital. Uma análise crítica sobre gamificação, performance e ensino das máquinas.';
+    }
+  }
+  
+  voiceIndicatorBtn.addEventListener('click', () => {
+    updateVoiceForSection();
+    if (criticalMode) {
+      speakWithInterruption(
+        currentSectionText,
+        'MAS ATENÇÃO: o que você está ouvindo precisa ser lido com olhar crítico. Onde estão as vozes silenciadas pela gamificação?'
+      );
+    } else {
+      speakCritical(currentSectionText, false);
+    }
+    voiceDialog.classList.add('show');
+    setTimeout(() => voiceDialog.classList.remove('show'), 5000);
+  });
+  
+  voiceClose.addEventListener('click', () => {
+    voiceDialog.classList.remove('show');
+    if (currentUtterance) window.speechSynthesis.cancel();
+  });
+  
+  const observer = new MutationObserver(() => updateVoiceForSection());
+  observer.observe(document.getElementById('contentOverlay'), { attributes: true, subtree: true, attributeFilter: ['class'] });
+  
+  // ========== MODO SOCRÁTICO ==========
+  const socraticPopup = document.getElementById('socraticPopup');
+  const socraticQuestion = document.getElementById('socraticQuestion');
+  const socraticToast = document.getElementById('socraticToast');
+  let socraticTimeout = null;
+  let socraticEnabled = true;
+  
+  const socraticQuestions = [
+    { q: "🤔 Você acredita que este app vai te ensinar chinês sozinho?", followUp: "E se eu te dissesse que nenhum app substitui um professor? O que muda?" },
+    { q: "🧠 O que você está fazendo aqui, além de acumular pontos?", followUp: "Você consegue distinguir entre 'progresso no app' e 'aprendizado real'?" },
+    { q: "🎯 Se você pudesse mudar uma coisa no HelloChinese, o que seria?", followUp: "Por que você acha que essa mudança não foi implementada ainda?" },
+    { q: "📊 Você já leu os termos de serviço do app?", followUp: "Você sabia que seus dados podem ser usados para treinar IA? Isso te incomoda?" },
+    { q: "💰 Quanto você já pagou (ou pagaria) para aprender chinês?", followUp: "Esse dinheiro poderia ser melhor investido em um professor particular?" },
+    { q: "🎮 A gamificação te motiva ou te vicia?", followUp: "Onde está a linha entre motivação saudável e dependência?" },
+    { q: "🌏 Você aprendeu algo sobre cultura chinesa hoje no app?", followUp: "Sem cultura, aprender uma língua faz sentido?" }
+  ];
+  
+  let currentQuestionIndex = 0;
+  
+  function showSocraticToast(message) {
+    socraticToast.textContent = message;
+    socraticToast.classList.add('show');
+    setTimeout(() => socraticToast.classList.remove('show'), 3000);
+  }
+  
+  function showNextSocraticQuestion() {
+    if (!socraticEnabled) return;
+    const qData = socraticQuestions[currentQuestionIndex % socraticQuestions.length];
+    socraticQuestion.innerHTML = qData.q;
+    socraticPopup.setAttribute('data-followup', qData.followUp);
+    socraticPopup.classList.add('show');
+    currentQuestionIndex++;
+    
+    if (socraticTimeout) clearTimeout(socraticTimeout);
+    socraticTimeout = setTimeout(() => {
+      socraticPopup.classList.remove('show');
+    }, 20000);
+  }
+  
+  function handleSocraticAnswer(answer) {
+    socraticPopup.classList.remove('show');
+    if (socraticTimeout) clearTimeout(socraticTimeout);
+    
+    const followUp = socraticPopup.getAttribute('data-followup');
+    
+    if (answer === 'yes') {
+      showSocraticToast('🤔 Interessante... Reflita sobre isso enquanto continua.');
+      setTimeout(() => {
+        socraticQuestion.innerHTML = followUp;
+        socraticPopup.classList.add('show');
+        setTimeout(() => socraticPopup.classList.remove('show'), 15000);
+      }, 1000);
+    } else if (answer === 'no') {
+      showSocraticToast('💡 Ótimo! Desconfiar é o primeiro passo para o pensamento crítico.');
+    }
+  }
+  
+  document.getElementById('socraticYes').addEventListener('click', () => handleSocraticAnswer('yes'));
+  document.getElementById('socraticNo').addEventListener('click', () => handleSocraticAnswer('no'));
+  document.getElementById('socraticDismiss').addEventListener('click', () => {
+    socraticPopup.classList.remove('show');
+    if (socraticTimeout) clearTimeout(socraticTimeout);
+  });
+  
+  let socraticInterval = null;
+  function startSocraticMode() {
+    if (socraticInterval) clearInterval(socraticInterval);
+    socraticInterval = setInterval(() => {
+      const overlay = document.getElementById('contentOverlay');
+      if (!overlay.classList.contains('open')) {
+        showNextSocraticQuestion();
+      }
+    }, 50000);
+  }
+  
+  // ========== MINIGAME ==========
+  const gameModal = document.getElementById('gameModal');
+  const openGameBtn = document.getElementById('openGameBtn');
+  const closeGameBtn = document.getElementById('closeGameBtn');
+  const startGameBtn = document.getElementById('startGameBtn');
+  const pauseGameBtn = document.getElementById('pauseGameBtn');
+  const gameScoreDiv = document.getElementById('gameScore');
+  const gameOverMsg = document.getElementById('gameOverMsg');
+  
+  let canvas = document.getElementById('gameCanvas');
+  let ctx = canvas.getContext('2d');
+  let gameRunning = false;
+  let gamePaused = false;
+  let score = 0;
+  let animationId = null;
+  
+  let player = { x: 100, y: canvas.height - 80, width: 30, height: 30, velocityY: 0, gravity: 0.8, jumpPower: -12, grounded: true };
+  let obstacles = [];
+  let powerups = [];
+  let frameCounter = 0;
+  let obstacleSpawnCounter = 0;
+  let powerupSpawnCounter = 0;
+  
+  function resizeCanvas() { canvas.width = 600; canvas.height = 400; player.y = canvas.height - 80; }
+  function jump() { if (player.grounded && gameRunning && !gamePaused) { player.velocityY = player.jumpPower; player.grounded = false; } }
+  function handleCanvasClick(e) { e.preventDefault(); jump(); }
+  function handleKeyPress(e) { if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); } }
+  
+  function spawnObstacle() {
+    const types = ['points', 'rank', 'notification'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    let color, icon;
+    if (type === 'points') { color = '#E85D04'; icon = '⭐'; }
+    else if (type === 'rank') { color = '#E76F51'; icon = '🏆'; }
+    else { color = '#BB3E03'; icon = '🔔'; }
+    obstacles.push({ x: canvas.width, y: canvas.height - 60, width: 35, height: 35, color: color, icon: icon, type: 'bad' });
+  }
+  
+  function spawnPowerup() {
+    const types = ['culture', 'reflection'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    let color, icon;
+    if (type === 'culture') { color = '#2A9D8F'; icon = '🎭'; }
+    else { color = '#F4A261'; icon = '💡'; }
+    powerups.push({ x: canvas.width, y: canvas.height - 60, width: 30, height: 30, color: color, icon: icon, type: 'good' });
+  }
+  
+  function updateGame() {
+    if (!gameRunning || gamePaused) return;
+    player.velocityY += player.gravity;
+    player.y += player.velocityY;
+    if (player.y >= canvas.height - 80) { player.y = canvas.height - 80; player.velocityY = 0; player.grounded = true; }
+    else { player.grounded = false; }
+    if (player.y < 0) { player.y = 0; player.velocityY = 0; }
+    
+    obstacleSpawnCounter++;
+    if (obstacleSpawnCounter > 60) { obstacleSpawnCounter = 0; spawnObstacle(); }
+    powerupSpawnCounter++;
+    if (powerupSpawnCounter > 120) { powerupSpawnCounter = 0; if (Math.random() < 0.5) spawnPowerup(); }
+    
+    for (let i = 0; i < obstacles.length; i++) {
+      obstacles[i].x -= 5;
+      if (obstacles[i].x + obstacles[i].width < 0) { obstacles.splice(i, 1); i--; }
+    }
+    for (let i = 0; i < powerups.length; i++) {
+      powerups[i].x -= 5;
+      if (powerups[i].x + powerups[i].width < 0) { powerups.splice(i, 1); i--; }
+    }
+    
+    for (let obs of obstacles) {
+      if (player.x < obs.x + obs.width && player.x + player.width > obs.x && player.y < obs.y + obs.height && player.y + player.height > obs.y) {
+        gameRunning = false;
+        gameOverMsg.textContent = '💀 GAME OVER! Você foi capturado pelo algoritmo! 💀';
+        if (animationId) cancelAnimationFrame(animationId);
+        return;
+      }
+    }
+    for (let i = 0; i < powerups.length; i++) {
+      const pup = powerups[i];
+      if (player.x < pup.x + pup.width && player.x + player.width > pup.x && player.y < pup.y + pup.height && player.y + player.height > pup.y) {
+        score += 10;
+        gameScoreDiv.textContent = `SCORE: ${score}`;
+        powerups.splice(i, 1);
+        i--;
+      }
+    }
+    frameCounter++;
+    if (frameCounter % 30 === 0) { score++; gameScoreDiv.textContent = `SCORE: ${score}`; }
+  }
+  
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#2a2a2a';
+    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+    ctx.fillStyle = '#E85D04';
+    ctx.fillRect(0, canvas.height - 52, canvas.width, 2);
+    ctx.fillStyle = '#2A9D8F';
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+    ctx.fillStyle = 'white';
+    ctx.font = '20px monospace';
+    ctx.fillText('🧑‍🎓', player.x + 5, player.y + 25);
+    for (let obs of obstacles) {
+      ctx.fillStyle = obs.color;
+      ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+      ctx.fillStyle = 'white';
+      ctx.font = '12px monospace';
+      ctx.fillText(obs.icon, obs.x + 10, obs.y + 22);
+    }
+    for (let pup of powerups) {
+      ctx.fillStyle = pup.color;
+      ctx.fillRect(pup.x, pup.y, pup.width, pup.height);
+      ctx.fillStyle = 'white';
+      ctx.font = '14px monospace';
+      ctx.fillText(pup.icon, pup.x + 8, pup.y + 22);
+    }
+    ctx.fillStyle = '#F4A261';
+    ctx.font = 'bold 16px monospace';
+    ctx.fillText(`SCORE: ${score}`, 10, 30);
+  }
+  
+  function gameLoop() { updateGame(); draw(); if (gameRunning) animationId = requestAnimationFrame(gameLoop); }
+  function startGame() {
+    gameRunning = true; gamePaused = false; score = 0; obstacles = []; powerups = []; frameCounter = 0;
+    obstacleSpawnCounter = 0; powerupSpawnCounter = 0; player.y = canvas.height - 80; player.velocityY = 0; player.grounded = true;
+    gameScoreDiv.textContent = 'SCORE: 0'; gameOverMsg.textContent = '';
+    if (animationId) cancelAnimationFrame(animationId);
+    gameLoop();
+  }
+  function pauseGame() { if (!gameRunning) return; gamePaused = !gamePaused; pauseGameBtn.textContent = gamePaused ? '▶ RETOMAR' : '⏸ PAUSAR'; if (!gamePaused) gameLoop(); }
+  
+  openGameBtn.addEventListener('click', () => { gameModal.classList.add('open'); resizeCanvas(); startGame(); });
+  closeGameBtn.addEventListener('click', () => { gameModal.classList.remove('open'); gameRunning = false; if (animationId) cancelAnimationFrame(animationId); });
+  startGameBtn.addEventListener('click', startGame);
+  pauseGameBtn.addEventListener('click', pauseGame);
+  canvas.addEventListener('click', handleCanvasClick);
+  document.addEventListener('keydown', handleKeyPress);
+  window.addEventListener('resize', resizeCanvas);
+  
+  // ========== FUNÇÕES EXISTENTES ==========
   const chineseChars = ['学', '中', '文', '你', '好', '拼', '音', '汉', '字', '语', '言', '书', '法', '道', '龙', '风', '山', '水', '明', '天', '地', '人', '和', '气'];
   
   function createFloatingChars() {
     const container = document.getElementById('floatingChars');
     if (!container) return;
-    
     container.style.position = 'absolute';
     container.style.top = '0';
     container.style.left = '0';
@@ -1194,7 +1872,6 @@
     container.style.bottom = '0';
     container.style.pointerEvents = 'none';
     container.style.overflow = 'hidden';
-    
     for (let i = 0; i < 35; i++) {
       const char = document.createElement('div');
       char.className = 'floating-char';
@@ -1213,85 +1890,20 @@
   }
   
   const styleSheet = document.createElement("style");
-  styleSheet.textContent = `
-    @keyframes floatChar {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.08; }
-      90% { opacity: 0.08; }
-      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
-    }
-  `;
+  styleSheet.textContent = `@keyframes floatChar { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.08; } 90% { opacity: 0.08; } 100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; } }`;
   document.head.appendChild(styleSheet);
-  
   createFloatingChars();
-
+  
   function playNiHaoSound() {
     const indicator = document.getElementById('soundIndicator');
     indicator.classList.add('show');
-    setTimeout(() => {
-      indicator.classList.remove('show');
-    }, 600);
-    
-    if ('speechSynthesis' in window && window.speechSynthesis) {
+    setTimeout(() => indicator.classList.remove('show'), 600);
+    if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      
       const utterance = new SpeechSynthesisUtterance('Nǐ hǎo');
       utterance.lang = 'zh-CN';
       utterance.rate = 0.85;
-      utterance.pitch = 1.0;
-      utterance.volume = 1;
-      
-      const voices = window.speechSynthesis.getVoices();
-      const chineseVoice = voices.find(voice => voice.lang === 'zh-CN' || voice.lang === 'zh');
-      if (chineseVoice) {
-        utterance.voice = chineseVoice;
-      }
-      
-      utterance.onerror = function() {
-        fallbackBeep();
-      };
-      
       window.speechSynthesis.speak(utterance);
-    } else {
-      fallbackBeep();
-    }
-  }
-  
-  function fallbackBeep() {
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      oscillator.frequency.value = 523.25;
-      gainNode.gain.value = 0.2;
-      oscillator.start();
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.4);
-      oscillator.stop(audioContext.currentTime + 0.4);
-      
-      setTimeout(() => {
-        const osc2 = audioContext.createOscillator();
-        const gain2 = audioContext.createGain();
-        osc2.connect(gain2);
-        gain2.connect(audioContext.destination);
-        osc2.frequency.value = 659.25;
-        gain2.gain.value = 0.15;
-        osc2.start();
-        gain2.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3);
-        osc2.stop(audioContext.currentTime + 0.3);
-      }, 200);
-    } catch(e) {
-      console.log('Áudio não suportado');
-    }
-  }
-  
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.getVoices();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = function() {
-        window.speechSynthesis.getVoices();
-      };
     }
   }
   
@@ -1299,77 +1911,60 @@
   const mainApp = document.getElementById('mainApp');
   const helloBtn = document.getElementById('helloBtn');
   const nihaoBtn = document.getElementById('nihaoBtn');
-  const feedbackMsg = document.getElementById('feedbackMsg');
-
+  const feedbackMsgElem = document.getElementById('feedbackMsg');
+  
   helloBtn.addEventListener('click', () => {
-    feedbackMsg.textContent = '🚫 Não é possível, hoje é dia de mandarim! 😎';
-    feedbackMsg.classList.add('show');
-    setTimeout(() => {
-      feedbackMsg.classList.remove('show');
-    }, 2000);
+    feedbackMsgElem.textContent = '🚫 Não é possível, hoje é dia de mandarim! 😎';
+    feedbackMsgElem.classList.add('show');
+    setTimeout(() => feedbackMsgElem.classList.remove('show'), 2000);
   });
-
+  
   nihaoBtn.addEventListener('click', () => {
     playNiHaoSound();
     splashScreen.classList.add('hide');
     setTimeout(() => {
       splashScreen.style.display = 'none';
       mainApp.style.display = 'block';
+      startSocraticMode();
     }, 800);
   });
-
+  
   const homeScreenDiv = document.getElementById('homeScreen');
   const overlay = document.getElementById('contentOverlay');
-  const closeBtn = document.getElementById('closeOverlayBtn');
-
+  const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+  
   function openOverlay(sectionId) {
     homeScreenDiv.style.display = 'none';
     overlay.classList.add('open');
-    
-    document.querySelectorAll('.content-section').forEach(section => {
-      section.classList.remove('active-section');
-    });
+    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active-section'));
     const targetSection = document.getElementById(`${sectionId}Section`);
     if (targetSection) targetSection.classList.add('active-section');
-    
     document.querySelectorAll('.nav-dot').forEach(btn => {
       btn.classList.remove('active');
-      if (btn.getAttribute('data-nav') === sectionId) {
-        btn.classList.add('active');
-      }
+      if (btn.getAttribute('data-nav') === sectionId) btn.classList.add('active');
     });
+    updateVoiceForSection();
   }
-
-  function closeOverlay() {
-    overlay.classList.remove('open');
-    homeScreenDiv.style.display = 'flex';
-  }
-
+  
+  function closeOverlay() { overlay.classList.remove('open'); homeScreenDiv.style.display = 'flex'; }
+  
   document.querySelectorAll('.portal-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const section = card.getAttribute('data-section');
-      openOverlay(section);
-    });
+    card.addEventListener('click', () => openOverlay(card.getAttribute('data-section')));
   });
-
-  closeBtn.addEventListener('click', closeOverlay);
-
+  closeOverlayBtn.addEventListener('click', closeOverlay);
+  
   document.querySelectorAll('.nav-dot').forEach(btn => {
     btn.addEventListener('click', () => {
       const section = btn.getAttribute('data-nav');
-      document.querySelectorAll('.content-section').forEach(sec => {
-        sec.classList.remove('active-section');
-      });
-      const target = document.getElementById(`${section}Section`);
-      if (target) target.classList.add('active-section');
-      
+      document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active-section'));
+      document.getElementById(`${section}Section`).classList.add('active-section');
       document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
       btn.classList.add('active');
-      
       document.querySelector('.content-container').scrollTop = 0;
+      updateVoiceForSection();
     });
   });
-
+  
   document.querySelectorAll('.theory-header').forEach(header => {
     const content = header.nextElementSibling;
     if (content) {
@@ -1379,121 +1974,50 @@
       });
     }
   });
-
-  function toggleInsight(card) {
-    card.classList.toggle('open');
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) {
-      closeOverlay();
-    }
-  });
-
-  // ========== FUNÇÃO PARA EXTRAIR ID DO YOUTUBE (SUPORTA SHORTS) ==========
+  
+  function toggleInsight(card) { card.classList.toggle('open'); }
+  
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay(); });
+  
   function getYouTubeId(url) {
     if (!url) return null;
-    
     const patterns = [
       /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-      /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
     ];
-    
     for (let pattern of patterns) {
       const match = url.match(pattern);
       if (match && match[1]) return match[1];
     }
     return null;
   }
-
-  // ========== FUNÇÃO PARA CARREGAR VÍDEOS DO YOUTUBE ==========
+  
   function loadYouTubeVideo(videoNumber) {
     const urlInput = document.getElementById(`youtubeUrl${videoNumber}`);
     const url = urlInput ? urlInput.value.trim() : '';
     const container = document.getElementById(`video${videoNumber}Container`);
     const statusDiv = document.getElementById(`videoStatus${videoNumber}`);
-    
-    if (!url) {
-      alert('Por favor, cole a URL do YouTube');
-      return;
-    }
-    
+    if (!url) { alert('Cole a URL do YouTube'); return; }
     const videoId = getYouTubeId(url);
-    
-    if (!videoId) {
-      alert('URL do YouTube inválida! Use formatos como:\n- https://youtu.be/ABCD1234\n- https://www.youtube.com/watch?v=ABCD1234\n- https://www.youtube.com/shorts/ABCD1234');
-      return;
-    }
-    
-    // Criar o iframe
+    if (!videoId) { alert('URL inválida'); return; }
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.title = `Vídeo ${videoNumber} - HelloChinese`;
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     iframe.allowFullscreen = true;
-    
-    // Limpar e adicionar
     container.innerHTML = '';
     container.appendChild(iframe);
-    
-    // Salvar no localStorage
     localStorage.setItem(`youtubeVideo${videoNumber}`, url);
-    
-    // Atualizar status
     if (statusDiv) {
-      const isShort = url.includes('/shorts/');
-      statusDiv.innerHTML = isShort ? '✅ Vídeo Short salvo! 📱' : '✅ Vídeo salvo! 🎬';
+      statusDiv.innerHTML = '✅ Vídeo salvo!';
       statusDiv.className = 'video-status saved';
-      setTimeout(() => {
-        statusDiv.innerHTML = '';
-        statusDiv.className = 'video-status';
-      }, 3000);
-    }
-    
-    // Feedback visual no botão
-    const btn = document.querySelector(`button[onclick="loadYouTubeVideo('${videoNumber}')"]`);
-    if (btn) {
-      const originalText = btn.textContent;
-      btn.textContent = '✓ Vídeo Carregado!';
-      btn.style.background = '#2A9D8F';
-      setTimeout(() => {
-        btn.textContent = originalText;
-        btn.style.background = '#E85D04';
-      }, 2000);
+      setTimeout(() => { statusDiv.innerHTML = ''; statusDiv.className = 'video-status'; }, 3000);
     }
   }
-
-  // ========== CARREGAR VÍDEOS SALVOS AO INICIAR ==========
+  
   function loadSavedVideos() {
-    // Carregar vídeo 1 do localStorage se existir
-    const savedUrl1 = localStorage.getItem('youtubeVideo1');
-    if (savedUrl1) {
-      const urlInput1 = document.getElementById('youtubeUrl1');
-      if (urlInput1) {
-        urlInput1.value = savedUrl1;
-        const container1 = document.getElementById('video1Container');
-        const videoId1 = getYouTubeId(savedUrl1);
-        if (videoId1 && container1) {
-          const iframe1 = document.createElement('iframe');
-          iframe1.src = `https://www.youtube.com/embed/${videoId1}`;
-          iframe1.title = `Vídeo 1 - HelloChinese`;
-          iframe1.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-          iframe1.allowFullscreen = true;
-          container1.innerHTML = '';
-          container1.appendChild(iframe1);
-        }
-      }
-    }
-    
-    // Carregar vídeo 2 (com URL padrão e também verificar localStorage)
     const savedUrl2 = localStorage.getItem('youtubeVideo2');
     let urlToLoad = 'https://youtube.com/shorts/DzWtUJGrfa4';
-    
-    if (savedUrl2) {
-      urlToLoad = savedUrl2;
-    }
-    
+    if (savedUrl2) urlToLoad = savedUrl2;
     const urlInput2 = document.getElementById('youtubeUrl2');
     if (urlInput2) {
       urlInput2.value = urlToLoad;
@@ -1502,97 +2026,61 @@
       if (videoId2 && container2) {
         const iframe2 = document.createElement('iframe');
         iframe2.src = `https://www.youtube.com/embed/${videoId2}`;
-        iframe2.title = `Vídeo 2 - HelloChinese`;
         iframe2.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe2.allowFullscreen = true;
         container2.innerHTML = '';
         container2.appendChild(iframe2);
-        
-        // Salvar a URL padrão no localStorage se não existir
-        if (!savedUrl2) {
-          localStorage.setItem('youtubeVideo2', urlToLoad);
-        }
-        
-        const statusDiv2 = document.getElementById('videoStatus2');
-        if (statusDiv2) {
-          statusDiv2.innerHTML = '📱 Vídeo Short carregado automaticamente!';
-          statusDiv2.className = 'video-status saved';
-          setTimeout(() => {
-            if (statusDiv2.innerHTML !== '') {
-              statusDiv2.innerHTML = '';
-              statusDiv2.className = 'video-status';
-            }
-          }, 4000);
-        }
+        if (!savedUrl2) localStorage.setItem('youtubeVideo2', urlToLoad);
       }
     }
   }
   
-  // ========== FUNCIONALIDADE DO QUIZ ==========
   let quizAnswered = false;
-  
   document.querySelectorAll('.quiz-option').forEach(option => {
     option.addEventListener('click', function() {
       if (quizAnswered) return;
-      
       const selectedAnswer = this.getAttribute('data-answer');
       const feedbackDiv = document.getElementById('quizFeedback');
       const resetBtn = document.getElementById('resetQuizBtn');
-      
       if (selectedAnswer === 'nǐhǎo') {
         this.style.background = 'linear-gradient(135deg, #2A9D8F, #1B6B5E)';
-        this.style.borderColor = '#2A9D8F';
-        feedbackDiv.innerHTML = '✅ <strong>Correto!</strong> "Nǐ hǎo" (你好) significa "olá" em mandarim! 🎉<br><br>Parabéns! Você acertou.';
+        feedbackDiv.innerHTML = '✅ <strong>Correto!</strong> "Nǐ hǎo" (你好) significa "olá" em mandarim! 🎉';
         feedbackDiv.style.background = 'rgba(42, 157, 143, 0.2)';
-        feedbackDiv.style.border = '1px solid #2A9D8F';
-        feedbackDiv.style.color = '#2A9D8F';
         quizAnswered = true;
         resetBtn.style.display = 'inline-block';
-        
         playNiHaoSound();
       } else {
-        this.style.background = 'rgba(231, 111, 81, 0.2)';
-        this.style.borderColor = '#E76F51';
-        
         let message = '';
-        if (selectedAnswer === 'bāxī') message = '❌ "Bāxī" (巴西) significa "Brasil", não "olá".';
-        else if (selectedAnswer === 'māo') message = '❌ "Māo" (猫) significa "gato", não "olá".';
-        else if (selectedAnswer === 'xièxiè') message = '❌ "Xièxiè" (谢谢) significa "obrigado", não "olá".';
-        
+        if (selectedAnswer === 'bāxī') message = '❌ "Bāxī" (巴西) significa "Brasil"';
+        else if (selectedAnswer === 'māo') message = '❌ "Māo" (猫) significa "gato"';
+        else if (selectedAnswer === 'xièxiè') message = '❌ "Xièxiè" (谢谢) significa "obrigado"';
         feedbackDiv.innerHTML = `${message}<br><br>Tente novamente! 💪`;
         feedbackDiv.style.background = 'rgba(231, 111, 81, 0.15)';
-        feedbackDiv.style.border = '1px solid #E76F51';
-        feedbackDiv.style.color = '#E76F51';
-        
         this.disabled = true;
-        this.style.opacity = '0.6';
-        this.style.cursor = 'not-allowed';
       }
     });
   });
   
-  const resetQuizBtn = document.getElementById('resetQuizBtn');
-  if (resetQuizBtn) {
-    resetQuizBtn.addEventListener('click', function() {
-      quizAnswered = false;
-      this.style.display = 'none';
-      
-      document.getElementById('quizFeedback').innerHTML = '';
-      document.getElementById('quizFeedback').style.background = '';
-      document.getElementById('quizFeedback').style.border = '';
-      
-      document.querySelectorAll('.quiz-option').forEach(option => {
-        option.style.background = '';
-        option.style.borderColor = '';
-        option.disabled = false;
-        option.style.opacity = '1';
-        option.style.cursor = 'pointer';
-      });
+  document.getElementById('resetQuizBtn')?.addEventListener('click', () => {
+    quizAnswered = false;
+    document.getElementById('resetQuizBtn').style.display = 'none';
+    document.getElementById('quizFeedback').innerHTML = '';
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.style.background = '';
+      option.disabled = false;
     });
-  }
+  });
   
-  // Carregar vídeos salvos ao iniciar
   loadSavedVideos();
+  updateVoiceForSection();
+  
+  // Tooltip extra via JavaScript para garantir funcionamento
+  document.querySelectorAll('.critical-tooltip').forEach(el => {
+    const text = el.getAttribute('data-critical');
+    if (text) {
+      el.setAttribute('title', text);
+    }
+  });
 </script>
 </body>
 </html>
